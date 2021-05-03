@@ -1,0 +1,12 @@
+group 'com.prism.dataplatform.flink'
+version '1.0.0'
+
+dependencies {
+    implementation(
+            flink.core,
+            flink.streaming,
+            flink.scala,
+            flink.twitter,
+            project(":core")
+    )
+}

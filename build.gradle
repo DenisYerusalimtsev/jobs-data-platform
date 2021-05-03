@@ -1,0 +1,64 @@
+plugins {
+    id 'scala'
+    id 'java-library'
+}
+
+group 'com.prism.dataplatform'
+version '1.0.0'
+
+ext {
+    scalaVersion = '2.12.13'
+    scalaCompatVersion = '2.12'
+    sparkVersion = '3.1.0'
+    flinkVersion = '1.12.2'
+    flinkCompatVersion = '1.12'
+
+    scalaDependencies = [
+            lib           : "org.scala-lang:scala-library:${scalaVersion}",
+            logging       : "com.typesafe.scala-logging:scala-logging_${scalaCompatVersion}:3.9.2",
+            log4j         : "org.apache.logging.log4j:log4j-slf4j-impl:2.11.0",
+            scopt         : "com.github.scopt:scopt_${scalaCompatVersion}:4.0.0",
+            yaml          : "org.yaml:snakeyaml:1.27"
+    ]
+    spark = [
+            core : "org.apache.spark:spark-core_${scalaCompatVersion}:${sparkVersion}",
+            sql  : "org.apache.spark:spark-sql_${scalaCompatVersion}:${sparkVersion}",
+            kafka: "org.apache.spark:spark-sql-kafka-0-10_${scalaCompatVersion}:${sparkVersion}",
+    ]
+    flink = [
+            core     : "org.apache.flink:flink-core:${flinkVersion}",
+            streaming: "org.apache.flink:flink-streaming-scala_${scalaCompatVersion}:${flinkVersion}",
+            scala    : "org.apache.flink:flink-scala_${scalaCompatVersion}:${flinkVersion}",
+            twitter  : "org.apache.flink:flink-connector-twitter_${scalaCompatVersion}:${flinkVersion}"
+    ]
+    gson = "com.google.code.gson:gson:2.8.5"
+}
+
+allprojects {
+    apply plugin: 'scala'
+    apply plugin: 'java-library'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation(
+                scalaDependencies.lib,
+                scalaDependencies.logging,
+                scalaDependencies.log4j,
+                scalaDependencies.yaml
+        )
+
+        testImplementation(
+                "org.mockito:mockito-scala_${scalaCompatVersion}:1.16.25",
+                "com.holdenkarau:spark-testing-base_${scalaCompatVersion}:3.0.1_1.0.0",
+                "org.apache.flink:flink-test-utils_${scalaCompatVersion}:1.12.2",
+                "org.apache.flink:flink-runtime_2.11:1.12.2"
+        )
+
+        testImplementation("org.scalatest:scalatest_${scalaCompatVersion}:3.0.1") {
+            force(true)
+        }
+    }
+}
